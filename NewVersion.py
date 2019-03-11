@@ -1,10 +1,9 @@
 import os
 import pygame
 import random
+import sys
 
 pygame.init()
-
-########################################################################################################################
 
 HEIGHT = 400
 WIDTH = 300
@@ -15,8 +14,25 @@ pygame.display.set_caption('The Invasion')
 DAMAGE_IMG = pygame.image.load(os.path.join('source/explosion', 'damage.png'))
 DESTROY_IMG = pygame.image.load(os.path.join('source/explosion', 'destroy.png'))
 
+class Button:
+    def __init__(self, text, color, yshift, func):
+        self.font = pygame.font.Font('freesansbold.ttf', 25)
+        self.image = self.font.render(text, True, color)
+        self.rect = self.image.get_rect()
+        self.rect.center = (WIDTH / 2, HEIGHT / 2 + yshift)
+        self.func = func
+        self.enabled = False
 
-########################################################################################################################
+    def update(self):
+        # on press
+        SCREEN.blit(self.image, self.rect)
+
+        if self.enabled:
+
+            if self.rect.collidepoint(pygame.mouse.get_pos()):
+                if pygame.mouse.get_pressed()[0]:
+                    self.func()
+
 
 class Score:
     def __init__(self):
@@ -150,6 +166,8 @@ class Enemy(pygame.sprite.Sprite):
             self.get_damage = False
 
 
+########################################################################################################################
+
 class Boss(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -224,7 +242,7 @@ class Boss(pygame.sprite.Sprite):
 
 ########################################################################################################################
 
-def main():
+def start_game():
     boss_go_lest = True
     endgame = False
     first_boss_appearance = True
@@ -356,10 +374,38 @@ def main():
         pygame.display.update()
         pygame.time.wait(5)
 
+def main():
+    bg = pygame.image.load(os.path.join('source', 'background.jpg'))
+    buttontimer = pygame.time.get_ticks()
+    pygame.mouse.set_visible(1)
 
-########################################################################################################################
+    play = Button("Start Game", (255, 255, 255), 30, start_game)
+    exit = Button("exit", (255, 255, 255), 120, sys.exit)
+
+    InvasionSurf = (pygame.font.Font('freesansbold.ttf', 32)).render('The Invasion', True, (255, 0, 0))
+    InvasionRect = InvasionSurf.get_rect()
+    InvasionRect.center = (WIDTH / 2, HEIGHT / 2 - 10)
+
+    while True:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        SCREEN.blit(bg, (0, 0))
+        SCREEN.blit(InvasionSurf, InvasionRect)
+
+        play.update()
+        exit.update()
+
+        if pygame.time.get_ticks() - buttontimer >= 1000:
+            buttontimer = pygame.time.get_ticks()
+            play.enabled = True
+            exit.enabled = True
+        pygame.display.update()
+        pygame.time.wait(5)
+
 
 if __name__ == "__main__":
     main()
-
-########################################################################################################################
