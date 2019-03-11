@@ -3,6 +3,8 @@ import pygame
 import random
 import sys
 
+########################################################################################################################
+
 pygame.init()
 
 HEIGHT = 400
@@ -13,6 +15,8 @@ pygame.display.set_caption('The Invasion')
 
 DAMAGE_IMG = pygame.image.load(os.path.join('source/explosion', 'damage.png'))
 DESTROY_IMG = pygame.image.load(os.path.join('source/explosion', 'destroy.png'))
+
+########################################################################################################################
 
 class Button:
     def __init__(self, text, color, yshift, func):
@@ -33,7 +37,7 @@ class Button:
                 if pygame.mouse.get_pressed()[0]:
                     self.func()
 
-
+                    
 class Score:
     def __init__(self):
         self.boss_destroy = 0
@@ -165,8 +169,6 @@ class Enemy(pygame.sprite.Sprite):
             self.damage_time = 0
             self.get_damage = False
 
-
-########################################################################################################################
 
 class Boss(pygame.sprite.Sprite):
     def __init__(self):
@@ -406,6 +408,9 @@ def main():
         pygame.display.update()
         pygame.time.wait(5)
 
+########################################################################################################################
 
 if __name__ == "__main__":
     main()
+
+########################################################################################################################
